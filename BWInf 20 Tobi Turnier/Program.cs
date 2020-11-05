@@ -8,7 +8,7 @@ namespace BWInf_20_Tobi_Turnier {
     class Program {
         static void Main(string[] args) {
 
-            Console.WriteLine(runMult(readFile(), 100));
+            Console.WriteLine(runMult(readFile(), 100, 1));
             //Console.WriteLine(liga(readFile()));
             Console.ReadKey();
         }
@@ -18,15 +18,14 @@ namespace BWInf_20_Tobi_Turnier {
         /// </summary>
         /// <param name="spielstärken"></param>
         /// <param name="maxNum">number of runs</param>
-        /// <param name="ligaspiel">true: liga-funkction; false: kO-funcion</param>
-        /// <param name="times5">true: every game x 5 in kO</param>
+        /// <param name="modus">0: liga; 1: kO; 2: kO x5</param>
         /// <returns>percentage of victories of best player</returns>
-        public static float runMult(int[] spielstärken, int maxNum, bool ligaspiel, bool times5=false) {
+        public static float runMult(int[] spielstärken, int maxNum, int modus) {
             int victories = 0;
             int bestManInd = getHighest(spielstärken);
             
             for (int i = 0; i < maxNum; i++) {
-                int erg = ligaspiel ? liga(spielstärken) : kO(spielstärken, times5);
+                int erg = modus==0 ? liga(spielstärken) : kO(spielstärken, (modus==2));
                 if (erg == bestManInd) {
                     victories++;
                 }
