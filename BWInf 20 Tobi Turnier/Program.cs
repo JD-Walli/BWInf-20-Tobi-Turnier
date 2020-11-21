@@ -7,9 +7,33 @@ using System.Threading.Tasks;
 namespace BWInf_20_Tobi_Turnier {
     class Program {
         static void Main(string[] args) {
+            var data = readFile(@"C:\Users\Jakov\Desktop\git\BWInf 20\BWInf 20 Tobi Turnier\spielstaerken4.txt");
+            double numstart = 10;
+            double num = numstart;
+            Random rnd = new Random();
+            for (int modus = 0; modus < 3; modus++) {
+                Console.WriteLine("\n\nModus: " + (modus == 0 ? "liga" : (modus == 1 ? "kO" : "kOx5")));
 
-            Console.WriteLine(runMult(readFile(), 100, 1));
-            //Console.WriteLine(liga(readFile()));
+                if (modus != 0) {
+                    for (int kombimodus = 0; kombimodus < 2; kombimodus++) {
+                        Console.WriteLine("\nKombimodus: " + kombimodus);
+                        for (int i = 0; i < 5; i++) {
+                            Console.WriteLine("{0:P2}", Math.Round(runMult(data, (float)num, modus, rnd, kombimodus),4));
+                            num = (int)Math.Pow(num, 1.5);
+                        }
+                        num = numstart;
+                    }
+                }
+                else {
+                    for (int i = 0; i < 5; i++) {
+                        Console.WriteLine("{0:P2}",Math.Round(runMult(data, (float)num, modus, rnd, 0),4));
+                        num = (int)Math.Pow(num, 1.5);
+                    }
+                    num = numstart;
+                }
+
+            }
+
             Console.ReadKey();
         }
 
@@ -20,17 +44,17 @@ namespace BWInf_20_Tobi_Turnier {
         /// <param name="maxNum">number of runs</param>
         /// <param name="modus">0: liga; 1: kO; 2: kO x5</param>
         /// <returns>percentage of victories of best player</returns>
-        public static float runMult(int[] spielstärken, int maxNum, int modus) {
-            int victories = 0;
+        public static float runMult(int[] spielstärken, float maxNum, int modus, Random rnd, int kombimodus) {
+            float victories = 0;
             int bestManInd = getHighest(spielstärken);
-            
+
             for (int i = 0; i < maxNum; i++) {
-                int erg = modus==0 ? liga(spielstärken) : kO(spielstärken, (modus==2));
+                int erg = modus == 0 ? liga(spielstärken, rnd) : kO(spielstärken, (modus == 2), rnd, kombimodus);
                 if (erg == bestManInd) {
                     victories++;
                 }
             }
-            Console.WriteLine("{0} : {1}", victories, maxNum);
+            Console.Write("{0} von {1} : ", victories, maxNum);
             return ((victories) / maxNum);
         }
 
@@ -38,8 +62,7 @@ namespace BWInf_20_Tobi_Turnier {
         #region liga
 
         //returns index of victory
-        public static int liga(int[] spielstärken) {
-            Random rnd = new Random();
+        public static int liga(int[] spielstärken, Random rnd) {
 
             int[] gewinne = new int[spielstärken.Length];
             for (int i = 0; i < spielstärken.Length; i++) {
@@ -54,7 +77,7 @@ namespace BWInf_20_Tobi_Turnier {
                     }
                 }
             }
-            Console.WriteLine(getHighest(gewinne));
+            //Console.WriteLine(getHighest(gewinne));
             return getHighest(gewinne);
         }
 
@@ -63,12 +86,18 @@ namespace BWInf_20_Tobi_Turnier {
 
         #region ko-spiel
 
-        public static int kO(int[] spielstärken, bool times5) {
+        public static int kO(int[] spielstärken, bool times5, Random rnd, int kombimodus) {
             List<Tuple<int, int>> ausstehendeSpiele = new List<Tuple<int, int>>();
-            for (int i = 0; i < spielstärken.Length; i += 2) {
-                ausstehendeSpiele.Add(new Tuple<int, int>(i, i + 1));
+            if (kombimodus == 0) {
+                for (int i = 0; i < spielstärken.Length; i += 2) {
+                    ausstehendeSpiele.Add(new Tuple<int, int>(i, i + 1));
+                }
             }
-            Random rnd = new Random();
+            else {
+                for (int i = 0; i < spielstärken.Length / 2; i++) {
+                    ausstehendeSpiele.Add(new Tuple<int, int>(i, spielstärken.Length - i - 1));
+                }
+            }
 
             //alle vorfinalspiele: 
             List<Tuple<int, int>> ausstehendeSpieleNeu = new List<Tuple<int, int>>();
@@ -85,14 +114,14 @@ namespace BWInf_20_Tobi_Turnier {
                     }
                     ausstehendeSpieleNeu.Add(new Tuple<int, int>(spieler1neu, spieler2neu));
                 }
-                printAusstehende(ausstehendeSpiele);
+                //printAusstehende(ausstehendeSpiele);
                 ausstehendeSpiele.Clear();
                 ausstehendeSpiele = new List<Tuple<int, int>>(ausstehendeSpieleNeu);
                 ausstehendeSpieleNeu.Clear();
             }
 
             //finale:
-            printAusstehende(ausstehendeSpiele);
+            //printAusstehende(ausstehendeSpiele);
             if (times5) {
                 return makeGamex5(spielstärken, ausstehendeSpiele[0], rnd) ? ausstehendeSpiele[0].Item1 : ausstehendeSpiele[0].Item2;
             }
@@ -142,9 +171,9 @@ namespace BWInf_20_Tobi_Turnier {
             }
             return ind;
         }
-        
 
-        public static int[] readFile(string pfad = @"C:\Users\Jakov\Desktop\git\BWInf 20\BWInf 20 Tobi Turnier\spielstaerken1.txt") {
+
+        public static int[] readFile(string pfad = @"C:\Users\Jakov\Desktop\git\BWInf 20\BWInf 20 Tobi Turnier\spielstaerken4.txt") {
             List<string> lines = new List<string>();
             string line = "";
             System.IO.StreamReader file = new System.IO.StreamReader(pfad);
@@ -161,7 +190,7 @@ namespace BWInf_20_Tobi_Turnier {
             }
             return spielstärken;
         }
-        
+
         #endregion
     }
 }
