@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BWInf_20_Tobi_Turnier {
+namespace BwInf_39_1_3_Tobi_Turnier {
     class Program {
         static void Main(string[] args) {
-            var data = readFile(@"C:\Users\Jakov\Desktop\git\BWInf 20\BWInf 20 Tobi Turnier\spielstaerken4.txt");
+            Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
+            var data = readFile(System.IO.Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\spielstaerken4.txt");
             double numstart = 10;
             double num = numstart;
             Random rnd = new Random();
@@ -173,7 +174,7 @@ namespace BWInf_20_Tobi_Turnier {
         }
 
 
-        public static int[] readFile(string pfad = @"C:\Users\Jakov\Desktop\git\BWInf 20\BWInf 20 Tobi Turnier\spielstaerken4.txt") {
+        public static int[] readFile(string pfad = @"C:\Users\Jakov\Desktop\git\BWInf 20\BwInf 39.1.3 Tobi Turnier\spielstaerken4.txt") {
             List<string> lines = new List<string>();
             string line = "";
             System.IO.StreamReader file = new System.IO.StreamReader(pfad);

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E07CA9C1-7AF2-4379-8119-1EFE4221EF1C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>BWInf_20_Tobi_Turnier</RootNamespace>
-    <AssemblyName>BWInf 20 Tobi Turnier</AssemblyName>
+    <RootNamespace>BwInf_39_1_3_Tobi_Turnier</RootNamespace>
+    <AssemblyName>BwInf_39_1_3_Tobi_Turnier</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
